@@ -1,3 +1,7 @@
+---
+tags:
+  - git
+---
 全称 git large file storage. 
 
 Git Large File Storage (LFS) **replaces large files** such as audio samples, videos, datasets, and graphics **with text pointers** inside Git, while storing the file contents on a remote server like GitHub.com or GitHub Enterprise.

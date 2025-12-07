@@ -1,13 +1,11 @@
 ---
-title: TensorRight
-author: Cervol Liu
-date: 2025-11-13
+title: "TensorRight: Automated verification of tensor graph rewrites"
 tags:
   - tensor
+  - verification
+  - POPL25
+  - term-rewrite
 ---
-
-#tensor #verification #POPL25
-
 Core insight:
 achieve unbounded verification by proving that there exists **a bound on tensor ranks**, under which bounded verification of all instances implies the correctness of the rewrite rule in the unbound setting. 
 

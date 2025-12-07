@@ -1,3 +1,7 @@
+---
+tags:
+  - tensor
+---
  [[TensorRight]] 中明确提到其当前局限性的一个点就是不支持涉及 layout-sensitive operator 重写规则的验证。本文介绍什么是 layout-sensitive。
 
 `layout-sensitive operator`（布局敏感算子）的语义与张量在内存中的 `physical layout`（物理布局）有关，这意味着仅仅知道张量的逻辑形状和元素值不足以确定其操作结果，还需要知道这些元素是如何在内存中连续排列的。`reshape` 算子就是这类算子的一个典型例子。

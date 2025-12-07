@@ -1,7 +1,10 @@
-#tensor #superoptimization #OSDI25 
-
-Mirage: A Multi-Level Superoptimizer for Tensor Programs
-
+---
+title: "Mirage: A Multi-Level Superoptimizer for Tensor Programs"
+tags:
+  - tensor
+  - OSDI25
+  - superoptimization
+---
 # Intro
 
 Existing work on automatically optimizing tensor programs fall into two categories:
