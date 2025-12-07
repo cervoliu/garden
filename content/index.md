@@ -1,3 +1,5 @@
-# Welcome to cervol's digital garden
+---
+title: Welcome to cervol's digital garden
+---
 
-Simple is More.
+For publishing obsidian notes I take.
