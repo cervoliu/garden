@@ -2,7 +2,7 @@ Checks for **refinement** between pair of LLVM IRs.
 
 Designed to avoid false alarm (does not report spurious cex)
 
-Fully models UB values ([[LLVM 中的未定义行为(UB)]])
+Fully models UB values ([[Undefined Behaviors in LLVM]])
 
 ---
 

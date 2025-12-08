@@ -1,4 +1,8 @@
-
+---
+tags:
+  - LLVM
+  - undefined-behavior
+---
 可以分类成两种 - immediate UB 和 deferred UB:
 - 通常简称的 "UB" 一般指的是 immediate UB，是最强形式的未定义行为。immediate UB 用来表示在 CPU 上 trap 的操作（例如除以0，空指针解引用）。在编译过程中如果遇到 UB 一般会直接终止。
 - Deferred UB:
@@ -9,4 +13,3 @@
 > 		Poison values are a stronger form of deferred UB than undef. They still allow instructions to be executed speculatively, but they taint the whole expression DAG (with some exceptions), akin to floating point NaN values.
 - deferred UB 可以转化为 UB: 
 	- branching on **undef** or **poison**
-

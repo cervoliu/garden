@@ -1,0 +1,5 @@
+---
+tags:
+  - concurrency
+  - consistency-model
+---

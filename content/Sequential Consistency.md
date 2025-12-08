@@ -1,8 +1,7 @@
 ---
 tags:
   - concurrency
-  - verification
-  - distributed-system
+  - consistency-model
 ---
 最早由 Lamport 在他 1979 年的论文中提出:
 
