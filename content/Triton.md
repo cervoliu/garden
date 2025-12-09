@@ -16,7 +16,7 @@ Triton: a language and compiler for writing highly efficient custom Deep-Learnin
 
 ![[Pasted image 20251204161637.png]]
 
-具有与 [[CUDA Parallel Programming Model | CUDA 编程模型]] 完全不同的一套自己的 Triton Programming Model，有空再补吧。这套编程模型假定了目标硬件是某种类似 GPU 的架构，基本可以认为面向 nvidia gpu。
+具有与 [[CUDA SIMT Programming Model| CUDA 编程模型]] 完全不同的一套自己的 Triton Programming Model，有空再补吧。这套编程模型假定了目标硬件是某种类似 GPU 的架构，基本可以认为面向 nvidia gpu。
 
 Meta 联合自己的 Pytorch 生态，使用 Triton 参与设计自研芯片 MTIA 的软件栈：
 
