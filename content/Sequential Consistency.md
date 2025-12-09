@@ -2,6 +2,7 @@
 tags:
   - concurrency
   - consistency-model
+  - memory-model
 aliases:
   - 顺序一致性
   - 强内存模型
