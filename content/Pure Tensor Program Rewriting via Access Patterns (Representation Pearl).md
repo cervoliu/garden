@@ -6,7 +6,7 @@ tags:
 ---
 ## motivation
 
-现有表示 ML 计算的 IR 要么 pure but high-level，无法表达 low-level 的针对目标硬件的 term rewrite。要么 low-level 但是 impure，impurity 阻碍了 term rewrite（ IR 的有状态性使得我们不能像对待数学表达式一样去做等式替换 ）。本文提出一种 pure 的 Glenside IR，通过针对访问的抽象 **access pattern** 实现 low-level, layout-aware, hardware-centric program rewrite。
+现有表示 ML 计算的 IR 要么 pure but high-level，无法表达 low-level 的针对目标硬件的 term rewrite。要么 low-level 但是 impure，impurity 阻碍了 term rewrite（ IR 的有状态性使得我们不能像对待数学表达式一样去做等式替换 ）。本文提出一种 pure 的 Glenside IR，通过针对访存的抽象 **access pattern**（访存模式） 实现 low-level, layout-aware, hardware-centric program rewrite。
 
 ## motivating example
 
@@ -53,7 +53,7 @@ matMul(P,Q)[i,j] := dotProd(P[i], trans2(Q)[j])
 Glenside IR 的目标: 不依赖于 name binding, supports specifying and composing higher-order tensor operators over arbitrary dimensions
 ## Glenside
 
-### Access Patterns
+### Access Patterns（访存模式）
 
 Observation: some tensor dimensions are _iterated over_ (accessed) while others are _computed on_. 
 
@@ -71,7 +71,7 @@ encode such common tensor IR patterns by their _shape_ -- a pair of tuples of po
 脉动阵列（Systolic Array）特性: 
 - 脉动阵列是一种常见的矩阵乘法硬件架构。一个 r 行 c 列的权重固定脉动阵列，接受两个输入：一个长度为 r 的向量列表（通常是激活值 activations），另一个长度为 c 的向量列表（通常是权重 weights）。它将第一个列表中的每个向量与第二个列表中的每个向量进行配对，并计算每对向量的点积。
 Glenside 的表示: 
-- 在 Glenside 中，矩阵乘法通常表示为 `(compute dotProd (cartProd ?a0 ?a1))`，这表示对 `?a0` 和 `?a1` 这两个访问模式的笛卡尔积（cartProd）的结果执行点积计算。
+- 在 Glenside 中，矩阵乘法通常表示为 `(compute dotProd (cartProd ?a0 ?a1))`，这表示对 `?a0` 和 `?a1` 这两个访存模式的笛卡尔积（cartProd）的结果执行点积计算。
 重写规则: 论文中展示的重写规则如下：
 ```
 (compute dotProd (cartProd ?a0 ?a1)) =>
@@ -81,7 +81,7 @@ and ?a1 is of shape ((?cols), (?rows))
 ```
 
 左侧 (LHS): `(compute dotProd (cartProd ?a0 ?a1))` 匹配任何进行点积计算的笛卡尔积模式。
-`?a0` 和 `?a1` 是模式变量，分别绑定到输入访问模式。
+`?a0` 和 `?a1` 是模式变量，分别绑定到输入访存模式。
 
 右侧 (RHS): `(systolicArray ?rows ?cols ?a0 (access (transpose ?a1 (list 1 0)) 0))` 是重写后的结果，它引入了一个新的 `systolicArray` construct 来表示对硬件的调用。
 
@@ -89,12 +89,13 @@ and ?a1 is of shape ((?cols), (?rows))
 `?a0` 直接作为脉动阵列的一个输入。
 `?a1` 经过了转换：`(access (transpose ?a1 (list 1 0)) 0)`
 `transpose ?a1 (list 1 0)`: 将 `?a1` 进行转置。
-`access ... 0`: 将转置后的 `?a1` 视为一个访问模式，其所有维度都作为访问维度（access dimension），计算维度为空（这通常意味着整个张量被视为一个整体进行访问）。
+`access ... 0`: 将转置后的 `?a1` 视为一个访存模式，其所有维度都作为访存维度（access dimension），计算维度为空（这通常意味着整个张量被视为一个整体进行访问）。
 
 这种转换是为了更准确地模拟实际脉动阵列硬件访问权重张量的方式：它一次性读取整个张量，并期望它以转置的形式布局在内存中。
 
-条件 (Condition): `where ?a0 is of shape ((?batch), (?rows)) and ?a1 is of shape ((?cols), (?rows))` 确保只有当输入访问模式的形状符合脉动阵列的要求时，才应用此重写规则。
+条件 (Condition): `where ?a0 is of shape ((?batch), (?rows)) and ?a1 is of shape ((?cols), (?rows))` 确保只有当输入访存模式的形状符合脉动阵列的要求时，才应用此重写规则。
 
-益处: 这种方式通过 Glenside 的访问模式，能够提供更丰富的数据布局信息，这对于后续的重写或代码生成步骤非常有帮助，因为它允许编译器在更高层次上理解和操作硬件特定的数据访问需求。
+益处: 这种方式通过 Glenside 的访存模式，能够提供更丰富的数据布局信息，这对于后续的重写或代码生成步骤非常有帮助，因为它允许编译器在更高层次上理解和操作硬件特定的数据访问需求。
 
 ### Flexible Mapping: Discovering [[im2col]]
+
