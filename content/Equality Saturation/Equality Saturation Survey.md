@@ -11,6 +11,7 @@ OOPSLA'21 Rewrite rule inference using equality saturation
 PLDI'23 Better Together: Unifying Datalog and Equality Saturation
 POPL'24 Guided Equality Saturation
 - Case Study 了 RISE 上的 rewrite
+OOPSLA'24 Fast and Optimal Extraction for Sparse Equality Graphs
 OOPSLA'24 PolyJuice: Detecting Mis-compilation Bugs in Tensor Compilers with Equality Saturation Based Rewriting
 ASPLOS'25 SmoothE: Differentiable E-Graph Extraction:
 - support for differentiable cost model (in extraction)
