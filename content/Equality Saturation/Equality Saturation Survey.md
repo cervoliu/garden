@@ -6,9 +6,12 @@ tags:
   - equality-saturation
   - term-rewrite
 ---
-POPL'21 egg: Fast and extensible equality saturation
+POPL'21 egg: Fast and extensible equality saturation:
+- efficient rebuilding，本质上可以认为是算法与数据结构中的一种经典优化: lazy approach。lazy-style rebuilding 是如何保证 e-matching 不会“漏”的？
+- abstract interpretation on e-classes
 OOPSLA'21 Rewrite rule inference using equality saturation
 PLDI'23 Better Together: Unifying Datalog and Equality Saturation
+- egg 的相同团队做的后续工作。
 POPL'24 Guided Equality Saturation
 - Case Study 了 RISE 上的 rewrite
 OOPSLA'24 Fast and Optimal Extraction for Sparse Equality Graphs
