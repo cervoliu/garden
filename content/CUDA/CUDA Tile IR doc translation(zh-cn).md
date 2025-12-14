@@ -1,6 +1,11 @@
 ---
 draft: true
 ---
+# 0. 译者注
+
+- Operations 在手册中一般指 Tile IR 指令，故翻译为“指令”。
+- tile, block, grid, kernel 等领域特定概念不做翻译。
+
 # 2. 编程模型
 
 Tile IR 扩展了 CUDA 的底层编程模型，引入了不同于 CUDA C++ 或 PTX 中已有内容的新抽象。
@@ -30,7 +35,7 @@ Tile kernel 是程序的入口点，作为 tile block 的并行实例执行。
 
 ### 2.1.1. tile programming 有何不同？
 
-Tile IR 是 CUDA 编程模型的扩展，它实现了对 tile 编程的 first-class 支持。tiled kernels 将程序表示为在 tile 上操作的逻辑 tile 线程的网格（grid）。网格和单个 tile 线程到底层硬件线程的映射被抽象出编程模型之外，由编译器处理。
+Tile IR 是 CUDA 编程模型的扩展，它实现了对 tile 编程的 first-class 支持。tiled kernels 将程序表示为在 tile 上操作的逻辑 tile 线程的 grid。Grid 和单个 tile 线程到底层硬件线程的映射被抽象出编程模型之外，由编译器处理。
 
 NVIDIA 流式多处理器（SM）的 SIMT 编程模型是一种线程在（相对）较小的数据块上操作的模型，用户负责将线程划分和调度到适当的块中，以高效地计算输入数据。该模型为程序员提供了将线程映射到数据（或反之）的灵活性。SIMT 是 CUDA 和 PTX 公开的编程模型，自 2006 年推出以来，一直为 NVIDIA GPU 提供良好服务。
 
@@ -132,6 +137,22 @@ store_ptr_tko weak %c_tensor, %c_val : tile<128xptr<f32>>, tile<128xf32> -> toke
 
 # 6. 语义
 
+本节对 Tile IR 的操作语义进行书面阐述。这些语义旨在帮助以下两类读者理解 Tile IR：1) 对将 Tile IR 作为代码生成目标感兴趣的人员；2) 对阅读他人编写的 Tile IR 程序感兴趣的人员。
+
+本节并不试图形式化所有可能的行为，无论这些行为是否符合公理化公式或小步操作语义。如需更深入地了解该语言及其核心概念，请参阅“编程模型”部分。
+
+我们首先介绍抽象机器状态和语言定义，然后描述各个内核和程序的语义。接下来，我们讨论更多操作的语义，有关所有操作及其行为的完整描述，请参阅“Operations”部分。
+
+## 6.1 抽象状态机
+
+Tile IR 抽象状态机的状态 $\mathcal{S}$ 是一个元组，由以下几个部分组成：
+- 一个 well-formed 的模块（Module） $\mathcal{M}od$ ，其中模块的概念见 [[#6.2 模块]]。
+- 一个 tile block（或逻辑 tile thread）的 grid $\mathcal{TB}$，每个 grid 都表示一个 tile-kernel 实例。
+- 每个 tile block 都有一个无限寄存器文件（infinite register file）$\mathcal{R}$，将寄存器的名称映射到对应的值。
+- 一个全局内存 $M$，将地址映射到标量值。
+- 一组待定的内存访问集合 $P$，$P$ 的进展与 Tile IR 操作的执行异步进行。
+## 6.2 模块
+
 # 7. 内存模型
 
 内存模型定义了 loads 从内存中可以取出的合法的值。这并不像乍一看那样简单，为了实现编译器和硬件优化，我们允许指令重排序。
@@ -141,8 +162,6 @@ Tile IR 内存模型派生于 PTX 内存模型，因此它们的同步原语（s
 ## 7.1 内存模型操作
 
 内存模型由 tile operations 中「独立元素访问之间的关系」以及「对这些关系构成的环的限制」组成。因此，一条 Tile IR 内存指令会生成一个或多个内存模型操作。具体地，tile loads, stores。
-
-
 ## 7.2 作用域
 
 | 作用域          | 描述                                  |
@@ -150,9 +169,7 @@ Tile IR 内存模型派生于 PTX 内存模型，因此它们的同步原语（s
 | `tile_block` | Tile block 作用域，用于单个 tile block 内部通信 |
 | `device`     | Device 作用域，用于单个 GPU 内部通信            |
 | `sys`        | System 作用域，用于系统间通信                  |
-
 ## 7.3 内存序
 
 ## 7.4 Moral Strength
-
 
