@@ -3,8 +3,13 @@ tags:
   - ml-compiler
   - compilation
   - IR
+  - MLIR
 ---
-推荐阅读: [MLIR 学习：Dialect，可扩展性的基石](https://mp.weixin.qq.com/s/BotO4zBCxTxR-Nf0TRO_KQ)
+推荐阅读: 
+- [MLIR 学习：Dialect，可扩展性的基石](https://mp.weixin.qq.com/s/BotO4zBCxTxR-Nf0TRO_KQ)
+- [MLIR 学习：Operation，统一 IR 的原子](https://mp.weixin.qq.com/s/8uteeqmD0LmP9bcmBCkwXw)
+- [MemRef Dialect：MLIR 中统一内存模型与优化的核心抽象](https://mp.weixin.qq.com/s/Yq6F_Tr7Vi5ENUwDtIZOIQ)
+- [Transform Dialect：当 Pass 无法精准控制变换时](https://mp.weixin.qq.com/s/QLAHnNh_018x5r6TufNGFg)
 
 [[LLVM]] 的一个 sub-project，compiler infrastructure project。作为 LLVM 的一个子项目，自然也是[开源](https://github.com/llvm/llvm-project/tree/main/mlir/)的。
 
@@ -21,6 +26,6 @@ tags:
 
 MLIR 的编译是逐层下降（progressive lowering）的，即可能经过很多层 dialect 的转换，在 IR 的转换过程中逐渐添加对更底层信息的抽象。
 
-最终会被 lower 到 [[LLVM IR]]。
+如果目标硬件是 GPU，最终会被 lower 到 [[LLVM IR]]（如果目标硬件是 NPU（例如 Ascend），似乎并不依赖 LLVM？）
 
 ![[MLIR dialect translation.png]]
