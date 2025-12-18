@@ -8,6 +8,7 @@ tags:
 推荐阅读: 
 - [MLIR 学习：Dialect，可扩展性的基石](https://mp.weixin.qq.com/s/BotO4zBCxTxR-Nf0TRO_KQ)
 - [MLIR 学习：Operation，统一 IR 的原子](https://mp.weixin.qq.com/s/8uteeqmD0LmP9bcmBCkwXw)
+- [MLIR 学习：IR Structure， 多层级语义的骨架](https://mp.weixin.qq.com/s/4xVzSvdVBYRVEhban6c-RQ)
 - [MemRef Dialect：MLIR 中统一内存模型与优化的核心抽象](https://mp.weixin.qq.com/s/Yq6F_Tr7Vi5ENUwDtIZOIQ)
 - [Transform Dialect：当 Pass 无法精准控制变换时](https://mp.weixin.qq.com/s/QLAHnNh_018x5r6TufNGFg)
 
