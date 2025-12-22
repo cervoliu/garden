@@ -8,7 +8,7 @@ See also: [[CUDA]]
 Zen of SIMT: "Single Instruction Multiple Threads"
 ## Kernels
 
-chatgpt 省流：程序员可以定义 “kernel” 函数 (用 __global__ 指定) —— 当 kernel 被调用 (launch) 时，它会被 _并行执行 N 次_（由 N 个 CUDA 线程执行），而不是像普通函数那样只执行一次。每个线程都有唯一的线程 ID，可在 kernel 内通过内建变量 (threadIdx, blockIdx 等) 访问。
+>chatgpt 省流：程序员可以定义 “kernel” 函数 (用 __global__ 指定) —— 当 kernel 被调用 (launch) 时，它会被 _并行执行 N 次_（由 N 个 CUDA 线程执行），而不是像普通函数那样只执行一次。每个线程都有唯一的线程 ID，可在 kernel 内通过内建变量 (threadIdx, blockIdx 等) 访问。
 
 ---
 
@@ -39,7 +39,7 @@ Here, each of the _N_ threads that execute `VecAdd()` performs one pair-wise
 
 ## Thread Hierarchy
 
-chatgpt 省流: CUDA 的线程层次是分层的 (hierarchical)：在最顶层，是 grid → 由多个 thread-block 组成；每个 block 内包含多个 thread。这样设计允许开发者控制并行粒度 (coarse via blocks, fine via threads)。
+>chatgpt 省流: CUDA 的线程层次是分层的 (hierarchical)：在最顶层，是 grid → 由多个 thread-block 组成；每个 block 内包含多个 thread。这样设计允许开发者控制并行粒度 (coarse via blocks, fine via threads)。
 
 ---
 
@@ -116,13 +116,17 @@ Threads within a block can cooperate by sharing data through some _shared memor
 
 For efficient cooperation, shared memory is expected to be a low-latency memory near each processor core (much like an L1 cache) and `__syncthreads()` is expected to be lightweight.
 
-
 ## Memory Hierarchy
 
-chatgpt 省流: GPU 内存不是简单一个平面 (flat memory) —— 存在多级内存 (global, shared, constant, etc.)。合理利用这些不同层次 (尤其是 shared memory) 对性能非常关键。程序员通过语言扩展 (例如 __shared__ 关键字) 指定变量所处的内存区域。
+>chatgpt 省流: GPU 内存不是简单一个平面 (flat memory) —— 存在多级内存 (global, shared, constant, etc.)。合理利用这些不同层次 (尤其是 shared memory) 对性能非常关键。程序员通过语言扩展 (例如 __shared__ 关键字) 指定变量所处的内存区域。
 
 ---
 CUDA threads may access data from multiple memory spaces during their execution as illustrated below. Each thread has private local memory. Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. Thread blocks in a thread block cluster can perform read, write, and atomics operations on each other’s shared memory. All threads have access to the same global memory.
+
+> **Cluster**：CUDA Compute Capability 9.0 引入的概念，**是多个 thread block（CTA）的集合**，这些 blocks 在一个 GPU Processing Cluster（GPC）内共同调度、可以协同访问 **Distributed Shared Memory**（分布式共享内存）。
+> CUDA API 中 **cluster 的大小由 launch 配置指定**（不是固定硬件值），即：
+> `__cluster_dims__((c_x,c_y,c_z)) __global__ void kernel(...) { … }`
+
 
 There are also two additional read-only memory spaces accessible by all threads: the constant and texture memory spaces. The global, constant, and texture memory spaces are optimized for different memory usages (see [Device Memory Accesses](https://docs.nvidia.com/cuda/cuda-c-programming-guide/#device-memory-accesses)). Texture memory also offers different addressing modes, as well as data filtering, for some specific data formats (see [Texture and Surface Memory](https://docs.nvidia.com/cuda/cuda-c-programming-guide/#texture-and-surface-memory)).
 
@@ -152,5 +156,4 @@ chatgpt 省流: 随着硬件/CUDA 版本发展 (例如较新 GPU)，CUDA 引入�
 
 In the CUDA programming model a thread is the lowest level of abstraction for doing a computation or a memory operation. Starting with devices based on the **NVIDIA Ampere GPU Architecture**, the CUDA programming model provides acceleration to memory operations via the asynchronous programming model. The asynchronous programming model defines the behavior of asynchronous operations with respect to CUDA threads.
 
-  
 The asynchronous programming model defines the behavior of [Asynchronous Barrier](https://docs.nvidia.com/cuda/cuda-c-programming-guide/#aw-barrier) for synchronization between CUDA threads. The model also explains and defines how [cuda::memcpy_async](https://docs.nvidia.com/cuda/cuda-c-programming-guide/#asynchronous-data-copies) can be used to move data asynchronously from global memory while computing in the GPU.

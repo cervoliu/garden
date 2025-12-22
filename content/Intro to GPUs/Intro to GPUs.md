@@ -1,3 +1,11 @@
+---
+aliases:
+  - GPU 简介
+tags:
+  - hardware
+---
+See also: 
+- [Modular's tutorial of Nvidia Blackwell GPU](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-1-introduction)
 # Intro to GPUs
 
 GPUs are essential for high-performance computation, but programming them has historically been a highly specialized skill. Mojo represents a chance to rethink GPU programming and make it more approachable. But if you've never programmed a GPU before, you first need to understand how the GPU hardware and execution model is different from a CPU. That's what this page is all about—there's no code here, so if you already understand GPU hardware, you can skip to the [Get started tutorial](https://docs.modular.com/mojo/manual/gpu/intro-tutorial) or [GPU programming fundamentals](https://docs.modular.com/mojo/manual/gpu/fundamentals).
