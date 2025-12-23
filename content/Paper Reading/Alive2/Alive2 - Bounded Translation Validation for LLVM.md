@@ -6,7 +6,7 @@ Fully models UB values ([[Undefined Behaviors in LLVM]])
 
 ---
 
-![[Figure2.png|500]]
+![[alive2-Figure2.png|500]]
 
 ---
 

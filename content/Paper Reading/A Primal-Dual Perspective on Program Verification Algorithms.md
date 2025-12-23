@@ -3,6 +3,7 @@ tags:
   - paper-reading
   - POPL25
   - verification
+draft: true
 ---
 By Takeshi Tsukada et. al.
 
