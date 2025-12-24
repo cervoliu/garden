@@ -3,7 +3,7 @@ tags:
   - cuda
   - debug
 ---
-CUDA 11.6 之前的调试工具叫 `cuda-memcheck` ，11.6弃用，并被 `compute-sanitizer` 取代。
+CUDA 11.6 之前有个调试工具叫 `cuda-memcheck` ，11.6 弃用，并被 `compute-sanitizer` 取代。`compute-sanitizer` 是一个动态的检测工具，其原理是 dynamic instruction instrumentation。
 
 Compute Sanitizer 中有四个主要工具：
 

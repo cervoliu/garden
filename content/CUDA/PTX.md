@@ -5,3 +5,4 @@ tags:
   - cuda
   - parallel
 ---
+VSA(Virtual Instruction Set)

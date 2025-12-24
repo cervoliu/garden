@@ -43,6 +43,7 @@ Cons:
 ## §3 overview
 
 ### §3.1 TensorRight Rewrite Rules
+
 考虑如下重写规则
 
 $$
