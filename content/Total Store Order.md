@@ -5,7 +5,7 @@ tags:
   - memory-model
   - x86
 ---
-TSO 是 Intel x86 架构采用的[[Memory Model|内存模型]]，在工业界已得到广泛应用。
+TSO 是 Intel x86 架构采用的[[Memory Consistency Model|内存模型]]，在工业界已得到广泛应用。
 
 ![[PSO 架构.png#pic_center|400]]
 
