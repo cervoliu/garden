@@ -11,9 +11,9 @@ tags:
   - architecture
 ---
 推荐阅读: 
-- [内存模型与内存序](https://jia.je/hardware/2024/09/04/memory-model-and-memory-ordering)
-- [Hardware Memory Model](https://research.swtch.com/hwmm)
-- [Programming Language Memory Models](https://research.swtch.com/plmm)。
+- [内存模型与内存序 by jiege](https://jia.je/hardware/2024/09/04/memory-model-and-memory-ordering)
+- [Hardware Memory Model by Russ Cox](https://research.swtch.com/hwmm)
+- [Programming Language Memory Models by Russ Cox](https://research.swtch.com/plmm)。
 
 一些对内存模型是什么的回答：
 - 内存模型是对程序运行环境中内存[[Operational Semantics|操作语义]]的形式化描述
