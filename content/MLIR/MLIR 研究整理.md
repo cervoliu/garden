@@ -29,4 +29,3 @@ tags:
 	- lowering equivalence property: all valid paths for the same MLIR program should produce semantically equivalent results
 - OOPSLA'25 DESIL: Detecting Silent Bugs in MLIR Compiler Infrastructure
 - ISSTA'24 Fuzzing MLIR Compiler Infrastructure via Operation Dependency Analysis
-- 
