@@ -100,29 +100,3 @@ A：本文中的 Translation Validation (翻译验证, TV) 和 Peephole Rewrite 
     *   **背景：** 在数据流分析验证中，`transfer` dialect 用于定义 `transfer function`。
     *   **手动工作：** 论文中 `ORImpl` 的例子表明，这些 `transfer function` 是**手动编写**的 (`func.func @ORImpl(...)`)。虽然它们可以被验证，但 `transfer function` 本身的设计和实现（使其 sound 且 precise）是手动工作。
     *   **挑战：** `transfer function` 的正确性是数据流分析正确性的关键，编写它们需要深刻的领域知识和严谨性。
-
-**Scale Up 的策略和方向**
-
-为了减小上述手动工作并实现更大的 scale，未来的研究和工程方向可以包括：
-
-1.  **语义自动合成 / 推断 (Automated Semantic Synthesis/Inference):**
-    *   **目标：** 这是减少手动工作最根本的方法。能否从 `operation` 的类型签名、名称约定、或者少量的输入-输出对中**自动推断**其语义并生成 `lower` 转换？
-    *   **挑战：** 这是一个极其困难的问题，涉及到程序合成和机器学习技术。但如相关工作 NiceToMeetYou 所示，对于某些特定类型的 `transfer function` 或简单 `operation`，部分自动化是可能的。
-    *   **Manual Effort 转化：** 如果成功，手动工作将从编写 `lower` 转换变为**提供更高级别的语义描述**（可能是形式化的、声明式的），或者**提供训练数据**，再或者**审核自动合成的结果**。
-
-2.  **更强大的声明式语义定义语言 (More Expressive Declarative Semantic Definition Language):**
-    *   **目标：** 论文提到 `pdl` 在表达 side-effect、属性和类型操作时的局限性。开发一个**更通用、更强大的声明式语言**来定义 `operation` 的语义。这个语言本身可以被自动地 `lower` 到语义 `dialect`。
-    *   **挑战：** 需要设计一个既能捕捉复杂语义（包括 side-effect 和 UB），又能被高效地翻译成 SMT 查询的语言。
-    *   **Manual Effort 转化：** 手动工作将从编写命令式 `lower` 代码转向**用这种新的声明式语言编写语义**，这可能更符合形式化方法专家的思维方式，并且更不易出错。
-
-3.  **形式化验证的模块化和组合性 (Modularity and Composability of Formal Verification):**
-    *   **目标：** 当新的 `dialect` 建立在现有 `dialect` 之上时，能否**复用**底层 `dialect` 的已验证语义？
-    *   **挑战：** 这要求语义定义本身具有良好的模块化和抽象性，能够通过组合而不是从头开始定义来构建更复杂的语义。
-    *   **Manual Effort 转化：** 减少重复工作，当定义新的 `dialect` 语义时，可以大量复用已验证的组件，而不是为每个 `operation` 都编写基础语义。
-
-4.  **SMT 求解器性能优化和领域特定优化 (SMT Solver Performance and Domain-Specific Optimizations):**
-    *   **目标：** 尽管不是直接减少手动工作，但**提升 SMT 求解效率**可以间接支持更大规模的验证，减少超时和计算资源的消耗。论文中提到的消除代数数据类型就是一种有效的优化。
-    *   **挑战：** 这需要深入的 SMT 知识和对特定领域 (如位向量、内存模型) 的理解来设计优化 pass。
-    *   **Manual Effort 转化：** 主要是 SMT 专家的手动投入来开发新的优化策略和工具。
-
-总之，要将本文提出的验证方法 scale up，最大的手动工作挑战在于**为 MLIR 中海量的 `operation` 手动定义其形式化语义**。解决这个问题的核心方向是**提升语义定义的自动化程度**，无论是通过合成、推断还是更高级别的声明式语言。
