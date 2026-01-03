@@ -21,3 +21,5 @@ ASPLOS'25 SmoothE: Differentiable E-Graph Extraction:
 POPL'25 Dis/Equality Graphs
 - formalism for e-graphs
 PLDI'25 Slotted E-Graphs: First-Class Support for (Bound) Variables in E-Graphs
+-  case study 了一种 functional array language，似乎与 tensor 有关
+OOPSLA'25 KestRel: Relational Verification using E-Graphs for Program Alignment
