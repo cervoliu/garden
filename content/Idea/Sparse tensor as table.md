@@ -1,0 +1,1 @@
+Thus computation graph as relational query
