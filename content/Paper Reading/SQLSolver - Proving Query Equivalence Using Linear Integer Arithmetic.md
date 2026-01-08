@@ -6,3 +6,4 @@ tags:
   - equivalence-checking
   - paper-reading
 ---
+验证 SQL 查询的等价性。
