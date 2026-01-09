@@ -3,7 +3,7 @@ aliases:
   - C11 内存模型
 tags:
   - memory-model
-  - concurrency
+  - consistency-model
 ---
 C11 是 ISO 于 2011 年发布的 C 语言标准。
 
@@ -11,7 +11,7 @@ C11 是 ISO 于 2011 年发布的 C 语言标准。
 
 在 C11 中，每个原子操作（如原子读取 `atomic_load`、原子写入 `atomic_store`）或内存屏障（`atomic_thread_fence`）都具有一个内存序（Memory Order）参数，表示对该原子操作或内存屏障两侧操作的顺序约束强度：
 - 顺序一致性（SC）：最强的顺序约束， C11 要求程序中所有 SC 原子操作和内存屏障在运行时呈现出全局线性化的顺序。若程序中所有操作均为 SC 原子操作，则该程序在 C11 内存模型下的行为等价于 [[Sequential Consistency|SC 内存模型]]下的行为。
+- 获取（Acquire）与 释放（Release） ：一组介于 SC 与 Relaxed 之间的顺序约束，体现了 C11 用于在线程间同步内存访问的 Acquire-Release 语义，该语义不保证 Sequential Consistency，但保证 Coherence。
 - 放松（Relaxed）：最弱的顺序约束，对操作的顺序不做任何要求，允许任意形式的乱序执行。
-- 获取（Acquire）与 释放（Release） ：一组介于 SC 与 Relaxed 之间的顺序约束，体现了 C11 用于在线程间同步内存访问的 Acquire-Release 语义。
 
 以 C11 为代表的软件内存模型从程序语言层面定义了内存操作的顺序约束，允许程序开发者通过使用原子操作或插入内存屏障来显式控制内存操作的乱序执行行为，在优化程序性能的同时引入了更复杂的并发语义。

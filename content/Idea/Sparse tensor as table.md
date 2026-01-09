@@ -104,12 +104,12 @@ GROUP BY A.i, B.k
 
 你甚至可以画一个一一对应的 mapping：
 
-|**ML / Tensor**|**DB**|
-|---|---|
-|computation graph|query plan|
-|operator fusion|operator pushdown|
-|common subexpression elimination|view reuse|
-|cost model (FLOPs / memory)|cost model (IO / cardinality)|
+| **ML / Tensor**                  | **DB**                        |
+| -------------------------------- | ----------------------------- |
+| computation graph                | query plan                    |
+| operator fusion                  | operator pushdown             |
+| common subexpression elimination | view reuse                    |
+| cost model (FLOPs / memory)      | cost model (IO / cardinality) |
 
 ---
 ## **4️⃣ 已有研究：这不是空想**
