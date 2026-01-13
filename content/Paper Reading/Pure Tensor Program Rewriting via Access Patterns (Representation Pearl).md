@@ -98,4 +98,3 @@ and ?a1 is of shape ((?cols), (?rows))
 益处: 这种方式通过 Glenside 的访存模式，能够提供更丰富的数据布局信息，这对于后续的重写或代码生成步骤非常有帮助，因为它允许编译器在更高层次上理解和操作硬件特定的数据访问需求。
 
 ### Flexible Mapping: Discovering [[im2col]]
-
