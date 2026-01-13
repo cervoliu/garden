@@ -209,11 +209,3 @@ Tensor contraction 通常在 **semiring** 上：
 - autodiff → provenance / lineage
     
 这在理论上是非常漂亮的。
-
-----
-
-关系 $R \subseteq K \times V$，其中:
-- $K$：key structure，作为 index 的 key
-- $V$：value space（payload），lives in a semi-ring
-
-尝试给出 sparse tensor 的算子的 denotational semantic  
