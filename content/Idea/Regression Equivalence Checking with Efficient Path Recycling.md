@@ -55,3 +55,10 @@ OpenSSL / NaCl: ...
 ---
 ## References
 
+
+
+----
+
+We decided to directly target binary programs, based on the following considerations: 
+1. To minimize the trust computing base. It is no need to rely on the correctness of the compiler or lowering passes from high-level programming language.
+2. Language agnostic. Even if a program is written in C, Rust, or any other language, once compiled, the same checker would be able to analyze it -- without relying on front-end support for each language.
