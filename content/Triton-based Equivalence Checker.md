@@ -1,7 +1,6 @@
-Triton 是一个二进制动态分析库，主要的特性是提供了一组对各个架构（x86-64, x86, arm32, AArch64, RISC-V 32/64）的指令语义的编码（用 Triton 内部的 AST 来表示），这在二进制验证相关的一些工作[1]中被称为 machine model，这一验证手段被称为 decompilcation-into-logic (DiL)。
+Triton 是一个二进制动态分析库，主要的特性是提供了一组对各个架构（x86-64, x86, arm32, AArch64, RISC-V 32/64）的指令语义的编码（用 Triton 内部的 AST 来表示），这在二进制验证相关的一些工作[1]中被称为 machine model，这一验证手段被称为 decompilation-into-logic (DiL)。
 Triton 对汇编指令语义的编码是手动实现的，事实上并没有严格的验证保障。而[2]使用了机器学习来 infer 指令的语义。
 
-![[Triton.png]]
 使用 Triton 的动态符号执行(也叫做混合执行，concolic execution)可以得到若干条执行路径，以及路径对应的路径条件与符号状态。
 
 动态符号执行的原理：

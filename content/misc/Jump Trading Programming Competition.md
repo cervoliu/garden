@@ -9,8 +9,7 @@ Submit Order:
 查询账户状态：
 - Query Balance 会返回当前 Cash, 以及各个 Product 的 Position
 - Query Order 会返回本账户下的 Open Order (day order)，这些 order 可以被 cancel
-- Query PNL history 会返回过去一小时账户的 P
-- nL 曲线
+- Query PNL history 会返回过去一小时账户的 PnL 曲线
 
 
 每 0.25s 刷新一次 Market Data：

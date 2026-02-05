@@ -1,4 +1,4 @@
-Checks for **refinement** between pair of LLVM IRs.
+Checks for **refinement** between pairs of LLVM IRs.
 
 Designed to avoid false alarm (does not report spurious cex)
 
