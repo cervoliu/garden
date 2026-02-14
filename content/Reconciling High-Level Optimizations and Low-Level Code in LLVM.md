@@ -122,5 +122,6 @@ p[1] = 0;
 print(p[1]); // prints 0 or 1?
 ```
 
+
 ## Memory Model for LLVM
 	
