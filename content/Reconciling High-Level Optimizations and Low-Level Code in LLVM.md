@@ -5,6 +5,7 @@ tags:
   - LLVM
   - OOPSLA18
 title: Reconciling High-Level Optimizations and Low-Level Code in LLVM
+author: JuneYoung Lee et.al.
 ---
 ## Overview
 
@@ -38,7 +39,7 @@ Flat memory model 下的程序行为高度依赖运行时（`malloc`），这种
 
 相较于 flat model，data-flow provenance 显得更“强”：
 
-- 对于每个指针，记录 1. 其指向的对象（provenance）  2. 地址（或相对该对象的地址偏移） （解释：一般说指针 `*p` 指向对象 `a` ，我们说的是 `p == &a`，这里的意思其实是 `p ∈ [&a, &a + sizeof a)`）
+- 对于每个指针，记录 1. 其指向的对象（provenance，中文意为「起源」或「由来」）  2. 地址（或相对该对象的地址偏移） （解释：一般说指针 `*p` 指向对象 `a` ，我们说的是 `p == &a`，这里的意思其实是 `p ∈ [&a, &a + sizeof a)`）
 - 指针的 out-of-bound 访问被视为 UB
 
 同样用例子来理解：
@@ -112,6 +113,8 @@ if (v == w) {
 
 > In this section we explain the model currently used by LLVM where pointer arithmetic is optionally "inbounds", allowing some precision to be recovered by making out-of-bounds pointer arithmetic undefined:
 
+这是什么意思呢？上一节我们提到，wildcard provenance 的引入会导致别名分析的困难，这是因为 wildcard 所代表的「任意的 provenance」太过宽泛了。伴随此节内存模型一同引入的是一种特别的指针算术 `+inb`，用以对指针算术加以区分。`+inb` 运算产生的，永远代表不越界的指针
+
 ```C++
 char *p = malloc(4); // (val=0x10, obj=p) 
 char *q = foo(p); // (val=0x13, obj=p) 
@@ -119,9 +122,9 @@ char *r = q +inb 2; // poison: 0x15 is out of bounds of p
 
 p[1] = 0; 
 *r = 1; // UB 
-print(p[1]); // prints 0 or 1?
+print(p[1]); // always prints 0
 ```
 
 
 ## Memory Model for LLVM
-	
+
