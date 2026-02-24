@@ -15,6 +15,9 @@ author: JuneYoung Lee et.al.
 
 > The two main questions a **memory model** needs to answer are (1) what is the return value of a load instruction, and (2) under what conditions is a memory-accessing instruction well-defined. A consequence is that the memory model should define which memory location a store instruction writes to.
 
+## Prerequisites
+
+- [[Undefined Behaviors in LLVM]]
 ---
 ## Memory Models for IR
 ### Flat Memory Model
@@ -113,7 +116,12 @@ if (v == w) {
 
 > In this section we explain the model currently used by LLVM where pointer arithmetic is optionally "inbounds", allowing some precision to be recovered by making out-of-bounds pointer arithmetic undefined:
 
-这是什么意思呢？上一节我们提到，wildcard provenance 的引入会导致别名分析的困难，这是因为 wildcard 所代表的「任意的 provenance」太过宽泛了。伴随此节内存模型一同引入的是一种特别的指针算术 `+inb`，用以对指针算术加以区分。`+inb` 运算产生的，永远代表不越界的指针
+这是什么意思呢？上一节我们提到，wildcard provenance 的引入会导致别名分析的困难，这是因为 wildcard 所代表的「任意的 provenance」太过宽泛了，导致别名分析的复杂度指数级上升。
+
+LLVM的解决方案：引入“界内（inbounds）“属性，用于指针算术指令（`getelementptr`or `gep`）。当一个 `gep` 指令被标记为 inbounds 时，它施加了一个严格的规则：base pointer（operand）和 result pointer 都必须指向同一个内存对象（包括对象尾部的一个字节）。
+如果这个规则被违反，那么 result pointer 就会变成 poison。poison 是 LLVM 中一种特殊，确定的未定义值，任何后续使用这个 poison 值的操作都会立即导致未定义行为（UB）。
+
+如何恢复精度：通过将越界指针算术定义为 UB，编译器可以利用这些更强的保证来推断指针的有效范围和别名关系。如果编译器能证明某个指针算术操作会导致 poison，那么任何依赖于这个 poison值的后续内存访问都可以被视为永远不会发生（因为触发 UB）。
 
 ```C++
 char *p = malloc(4); // (val=0x10, obj=p) 
@@ -125,6 +133,6 @@ p[1] = 0;
 print(p[1]); // always prints 0
 ```
 
+这种机制使得编译器能够对指针进行更激进的优化，例如在这个例子中，即使在运行时 q + 2 可能指向一个有效的内存地址，但由于它违反了 inbounds 的语义约定，编译器可以将其视为非法，从而允许进行更精确的别名分析。
 
 ## Memory Model for LLVM
-

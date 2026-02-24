@@ -42,7 +42,7 @@ SMT encodings
 	- block attributes (size, alignment, is_readonly, is_alive, allocation_type, physical_addr): an SMT array from pointer to byte
 	- memory accesses:
 		- split multi-byte load/store into single byte load/store
-		- may yields `poison` or UB
+		- may yield `poison` or UB
 - function calls ($\texttt{call}$): $(M_{o}, v_{o}, ub_{o}) = \texttt{call}(f, args, M)$
 
 
