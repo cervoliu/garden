@@ -15,7 +15,7 @@ author: JuneYoung Lee et.al.
 
 > The two main questions a **memory model** needs to answer are (1) what is the return value of a load instruction, and (2) under what conditions is a memory-accessing instruction well-defined. A consequence is that the memory model should define which memory location a store instruction writes to.
 
-## Prerequisites
+## 前置
 
 - [[Undefined Behaviors in LLVM]]
 ---
@@ -136,3 +136,33 @@ print(p[1]); // always prints 0
 这种机制使得编译器能够对指针进行更激进的优化，例如在这个例子中，即使在运行时 q + 2 可能指向一个有效的内存地址，但由于它违反了 inbounds 的语义约定，编译器可以将其视为非法，从而允许进行更精确的别名分析。
 
 ## Memory Model for LLVM
+
+
+
+```c++
+char *p = malloc(4); // (val=0x10, obj=p) 
+char *q = malloc(4); // (val=0x14, obj=q) 
+ 
+char *r = (char*)((int)p + 5); // (val=0x15, obj=*) 
+char *s = r +inb 1; // (val=0x16, obj=q) 
+*s = 0; // OK
+```
+
+
+
+```C++
+char *p = malloc(4); // (val=0x10, obj=p)  
+
+char *r = (char*)((int)p + 5); // (val=0x15, obj=*) 
+char *s = r +inb 1; // (val=0x16, obj=*, inb={0x15,0x16})  
+
+char *q = malloc(4); // (val=0x14, obj=q)  
+*s = 0; // OK since 0x15 and 0x16 are inbounds of same object
+```
+
+### 小结
+
+为了同时支持 high-level optimizations 与 low-level code，LLVM 将指针分成了两个类别：
+- 逻辑指针：派生于堆内存分配。对逻辑指针做数据流依赖分析，追踪其 provenance。
+- 物理指针：派生于整数到指针的强制类型转换。对物理指针并不追踪 provenance，而是使用 delayed bounds checking 和 twin memory allocation 保持分析精度。
+
