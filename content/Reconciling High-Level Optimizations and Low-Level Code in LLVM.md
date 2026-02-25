@@ -9,7 +9,7 @@ author: JuneYoung Lee et.al.
 ---
 ## Overview
 
-应当是首篇正式地提出形式化的 LLVM memory model 的工作。
+应当是首篇正式地提出形式化的 LLVM memory model 的工作，发表于 OOPSLA 2018。
 
 可以认为是后续 [[An SMT Encoding of LLVM’s Memory Model for Bounded Translation Validation]] 以及 [[Alive2 - Bounded Translation Validation for LLVM]] 的内存模型方面的理论基础。
 
@@ -118,8 +118,8 @@ if (v == w) {
 
 这是什么意思呢？上一节我们提到，wildcard provenance 的引入会导致别名分析的困难，这是因为 wildcard 所代表的「任意的 provenance」太过宽泛了，导致别名分析的复杂度指数级上升。
 
-LLVM的解决方案：引入“界内（inbounds）“属性，用于指针算术指令（`getelementptr`or `gep`）。当一个 `gep` 指令被标记为 inbounds 时，它施加了一个严格的规则：base pointer（operand）和 result pointer 都必须指向同一个内存对象（包括对象尾部的一个字节）。
-如果这个规则被违反，那么 result pointer 就会变成 poison。poison 是 LLVM 中一种特殊，确定的未定义值，任何后续使用这个 poison 值的操作都会立即导致未定义行为（UB）。
+LLVM的解决方案：引入“界内（inbounds）“属性，用于指针算术指令（`getelementptr`or `gep`）。当一个 `gep` 指令被标记为 inbounds 时，它施加了一个严格的规则：base 指针（operand）和 result 指针必须指向同一个内存对象（包括对象尾部的一个字节）。
+如果这个规则被违反，那么 result 指针就会变成 poison。poison 是 LLVM 中一种特殊，确定的未定义值，任何后续使用这个 poison 值的操作都会立即导致未定义行为（UB）。
 
 如何恢复精度：通过将越界指针算术定义为 UB，编译器可以利用这些更强的保证来推断指针的有效范围和别名关系。如果编译器能证明某个指针算术操作会导致 poison，那么任何依赖于这个 poison值的后续内存访问都可以被视为永远不会发生（因为触发 UB）。
 
@@ -137,7 +137,7 @@ print(p[1]); // always prints 0
 
 ## Memory Model for LLVM
 
-
+Inbounds pointer 模型的缺点是它不允许某些指针算术指令的重排序。考虑下面的例子：
 
 ```c++
 char *p = malloc(4); // (val=0x10, obj=p) 
@@ -148,7 +148,9 @@ char *s = r +inb 1; // (val=0x16, obj=q)
 *s = 0; // OK
 ```
 
+假如我们把 `r` 和 `s` 的定义重排到 `q` 之前，`s` 就会越界，并变成 `poison`值。
 
+本文为 LLVM 提出的新内存模型提议，将 `inbounds` 属性修饰的指针运算的 *immediate* bounds checking 修改为 *deferred* bounds checking。这意味着，允许越界指针的创建与运算，只有对其解引用时才触发 UB。
 
 ```C++
 char *p = malloc(4); // (val=0x10, obj=p)  
@@ -157,12 +159,12 @@ char *r = (char*)((int)p + 5); // (val=0x15, obj=*)
 char *s = r +inb 1; // (val=0x16, obj=*, inb={0x15,0x16})  
 
 char *q = malloc(4); // (val=0x14, obj=q)  
-*s = 0; // OK since 0x15 and 0x16 are inbounds of same object
+*s = 0; // OK since 0x15 and 0x16 are inbounds of same object (q)
 ```
 
+对于 `obj=*` 的指针，新内存模型追踪一组地址，这组地址在对应指针解引用时必须位于同一对象的界内。在每次 inbounds 指针运算中，我们会将 base 指针和 result 指针记录在 `inb` 字段中。如果 `inb` 中的地址并非全部位于同一对象的边界内，则内存访问操作是未定义行为 (UB)。因此，入界检查会延迟到指针解引用时进行。虽然延迟边界检查与立即边界检查的效果相同，但它允许指针运算指令自由移动，因为它们现在不依赖于内存状态。
 ### 小结
 
 为了同时支持 high-level optimizations 与 low-level code，LLVM 将指针分成了两个类别：
 - 逻辑指针：派生于堆内存分配。对逻辑指针做数据流依赖分析，追踪其 provenance。
 - 物理指针：派生于整数到指针的强制类型转换。对物理指针并不追踪 provenance，而是使用 delayed bounds checking 和 twin memory allocation 保持分析精度。
-
