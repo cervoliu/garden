@@ -10,6 +10,8 @@ zhihu-topics:
   - LLVM
   - 编译优化
   - 未定义行为
+zhihu-link: https://zhuanlan.zhihu.com/p/2010283568631410795
+zhihu-created-at: 2026-02-26 09:22
 ---
 ## Introduction
 
@@ -288,7 +290,8 @@ LLVM 中的 value lattice 为：immediate UB > `poison` > `undef` > `freeze(pois
 `undef` 值现已弃用，仅应用于表示未初始化内存的加载。
 
 ---
-## References
+## 参考
 
--  [LLVM Undefined Behavior 官方文档](https://llvm.org/docs/UndefinedBehavior.html)
-- [[Alive2 - Bounded Translation Validation for LLVM]]
+- [LLVM Undefined Behavior 官方文档](https://llvm.org/docs/UndefinedBehavior.html)
+- Juneyoung Lee, Yoonseung Kim, Youngju Song, Chung-Kil Hur, Sanjoy Das, David Majnemer, John Regehr, and Nuno P. Lopes. 2017. Taming undefined behavior in LLVM. In Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI 2017). Association for Computing Machinery, New York, NY, USA, 633–647. https://doi.org/10.1145/3062341.3062343
+- Nuno P. Lopes, Juneyoung Lee, Chung-Kil Hur, Zhengyang Liu, and John Regehr. 2021. Alive2: bounded translation validation for LLVM. In Proceedings of the 42nd ACM SIGPLAN International Conference on Programming Language Design and Implementation (PLDI 2021). Association for Computing Machinery, New York, NY, USA, 65–79. https://doi.org/10.1145/3453483.3454030
