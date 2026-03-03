@@ -46,7 +46,7 @@ feishu_shared_at: "2026-02-28 22:03"
 
 ### 技术方案
 
-![[Figure 4.png]]
+![[Paper Reading/Semantic Program Alignment for Equivalence Checking__assets/Figure 4.png]]
 
 对于**对齐谓词**（alignment predicate） $\xi$ 以及 $f,g$ 在相同测例下得到的迹 $\rho,\rho'$，令 $\sigma \in \rho, \sigma'\in \rho'$ 分别为迹的某个程序状态。若 $\xi(\sigma,\sigma')$ 成立，则称迹 $\rho,\rho'$ 在状态 $\sigma,\sigma'$ 处由 $\xi$ 对齐。特别地，认为 $\rho, \rho'$ 在程序初始状态和末尾状态处对齐（即使 $\xi$ 不成立）。所有由 $\xi$ 对齐的状态二元组构成一组**轨迹对齐**（trace alignment），它是状态的多对多映射。
 
