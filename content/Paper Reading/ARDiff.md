@@ -7,7 +7,7 @@ tags:
   - CEGAR
 feishushare: true
 feishu_url: "https://feishu.cn/docx/Mhexdulqmo69QoxtJjLcnc10n9f"
-feishu_shared_at: "2026-03-03 16:13"
+feishu_shared_at: "2026-03-06 13:24"
 ---
 > In the context of functional equivalence checking, two main approaches for dealing with these limitations of symbolic execution have been proposed: **Differential Symbolic Execution (DSE)** [38] **uses uninterpreted functions** - function symbols that abstract internal code representation and only guarantee returning the same value given the same input parameters - **to abstract syntactically identical segments of the code** in the compared versions.
 

@@ -3,6 +3,9 @@ tags:
   - paper-reading
   - compilation
   - translation-validation
+feishushare: true
+feishu_url: "https://feishu.cn/docx/Fs5SdfiVvoiUCyxiFGzc25gQnTf"
+feishu_shared_at: "2026-03-06 14:26"
 ---
 本文提出一种 Cross-version compiler validator，围绕 CLR(Common Language Runtime) JIT(Just-In-Time) Compiler 展开一系列实验。cross-version validation 实验包括同一个编译器不同日期（间隔7个月的前后两个工具版本），不同的目标平台（x86 vs ARM），不同的编译场景（JIT vs MDIL），不同的优化级别之间的对比。
 
