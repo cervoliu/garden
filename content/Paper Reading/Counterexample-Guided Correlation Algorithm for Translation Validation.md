@@ -12,9 +12,17 @@ feishu_shared_at: "2026-03-06 13:13"
 > For most programs/compiler-transformations, it usually suffices to restrict oneself to **bisimilarity checking**, where the algorithm proceeds by **1.correlating the transitions (or paths) in the two programs** and **2.identifying inductive relational predicates (or invariants) between variables (state-elements) of the two programs at the endpoints of the correlated transitions** [Pnueli et al. 1998]. We call the endpoints of the correlated transitions, correlated *PCpairs*, given that they are formed by pairing two program locations or PCs of the respective programs. If these correlations and relational invariants ensure equivalent observable behavior (e.g., identical sequence of I/O events, identical return value and returned heap state), then we have obtained a proof (or witness) of equivalence (and bisimilarity). **This proof, involving correlations and invariants, can be represented either as a (bi)simulation relation [Milner 1971; Necula 2000; Pnueli et al. 1998] or as a product program [Zaks and Pnueli 2008], both of which are equivalent representations.**
 
 本文的技术路线属于经典的构造程序对齐+在对齐结构上寻找关系不变式的两步方案，只不过本文把“构造程序对齐“这件事称为关联（correlation），并把被验证的属性称作双模拟（bisimulation）。
+
+> 维基百科 bisimulation 词条对 bisimulation 的形式化定义：
+> Given a labeled transition system $(S, \Lambda, \to)$, where $S$ is a set of states, $\Lambda$ is a set of labels and $\to$ is a set of labelled transitions (i.e., a subset of $S \times \Lambda \times S$), a **bisimulation** is a binary relation $R \subseteq S \times S$, such that both $R$ and its converse $R^{T}$ are simulations. 
+> Equivalently, $R$ is a **bisimulation** iff for every pair of states $(p, q)\in R$ and all labels $\lambda \in \Lambda$:
+> - if $p \xrightarrow{\lambda} p'$, then there is $q \xrightarrow{\lambda} q'$ such that $(p',q')\in R$;
+> - if $q \xrightarrow{\lambda} q'$, then there is $p \xrightarrow{\lambda} p'$ such that $(p',q') \in R$.
+
 本工作做的是 LLVM IR 程序与 x86 汇编程序之间的翻译验证，因此上述概念是定义在不同层次程序之间的。
 
 ![[image-20260306015214766.png]]
+
 > **Observation-A**: There exists a trade-off between the amount of computational effort spent in identifying the "right" product-CFG and the effort spent in identifying the required inductive invariants. *For most programs/compiler-transformations, there **exists** a product-CFG where the required invariants (to prove equivalence) are formed by simply relating the bitvector and array values through equality, inequality, and affine relations.* This claim has been observed and assumed by multiple independent prior research efforts [Churchill et al. 2019; Dahiya and Bansal 2017a; Gupta et al. 2018], and we refer to this as Observation-A in the rest of the paper.
 
 Observation-A: 对于绝大多数等价的编译变换，存在一种乘积构造，使得在该乘积程序上，所需完成等价证明的不变式仅由等式，不等式，仿射关系构成。
