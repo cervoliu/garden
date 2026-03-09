@@ -6,9 +6,9 @@ tags:
 ---
 ![[Figure 1.png]]
 
-![[Figure 2.png]]
+![[Paper Reading/Automated Regression Verification__assets/Figure 2.png]]
 
-![[Figure 3.png]]
+![[Paper Reading/Automated Regression Verification__assets/Figure 3.png]]
 
 ![[Paper Reading/Automated Regression Verification__assets/Figure 4.png]]
 
