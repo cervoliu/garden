@@ -6,16 +6,19 @@ tags:
   - POPL25
   - term-rewrite
 ---
-Core insight:
-achieve unbounded verification by proving that there exists **a bound on tensor ranks**, under which bounded verification of all instances implies the correctness of the rewrite rule in the unbound setting. 
+## 总结
+
+两个核心 idea：
+
+> achieve unbounded verification by proving that there exists **a bound on tensor ranks**, under which bounded verification of all instances implies the correctness of the rewrite rule in the unbound setting. 
 
 用 bounded-verification 验证 bound 内的 rank，再 k-induction on rank 完成 unbound 的验证
 
-we extend these observations to any arbitrary rule **by first partitioning the axes of a tensor into “groups”, where all axes in a group (aggregated-axes) share the same “role” and are treated uniformly by the operators**. We then present an algorithm to compute a sufficient rank for each group, allowing us to avoid verifying the rule for ranks beyond these sufficient ranks.
+> we extend these observations to any arbitrary rule **by first partitioning the axes of a tensor into “groups”, where all axes in a group (aggregated-axes) share the same “role” and are treated uniformly by the operators**. We then present an algorithm to compute a sufficient rank for each group, allowing us to avoid verifying the rule for ranks beyond these sufficient ranks.
 
 以聚合轴的概念表示任意 rank 的张量
 
-Contributions:
+贡献：
 - 提供了一个 DSL，支持用户表达 tensor compiler 中的 tensor graph rewrite rule
 	- 支持 rank- and size-polymorphic。rank-polymorphic 是通过 aggregated-axes 以及 rank class 两个概念实现的。每条规则中 aggregated-axes 以及 rank class 由用户定义。
 	- 支持 precondition
@@ -23,7 +26,7 @@ Contributions:
 - 自动验证用户书写的规则
 - 验证了张量编译器 XLA 代数化简模块中的重写规则 （115/175）
 
-Cons: 
+不足：
 - 只支持验证仅包含 **layout-insensitive** operators 的规则
 - 对 reduce operator 的化简处理是启发式的，且需要人工提供 hints，半支持
 
@@ -124,7 +127,7 @@ aggregated-axes: 一个特定算子对参与运算的张量的不同 axis 的作
 ![[aggregated-map.png]]
 可以在 shape 和 access 之间定义 element-wise 意义下的运算。
 
-![[Core rewrite rule representation with selected operators.png|| 600]]
+![[Core rewrite rule representation with selected operators.png||446]]
 
 ***
 ## §5 denotational semantics
@@ -145,7 +148,7 @@ aggregated-axes: 一个特定算子对参与运算的张量的不同 axis 的作
 ***
 ### $\mathrm{reduce}(\oplus, e, X)$ 
 
-![[reduce operator.png]]
+![[reduce operator.png|434]]
 
 其含义是：
 1.  输入: reduce 算子接收一个二元运算符 $\oplus$，一个张量 $e$ ，以及 $e$ 的一个聚合轴的集合 $X$ 作为输入。集合 $X$ 中的聚合轴要使用 $\oplus$ 归约掉。
@@ -188,12 +191,12 @@ p.s. 这里有一个细节上的问题，X 与 Y 是两个 tensor 的聚合轴�
 ***
 ### $\mathrm{relabel}(e,R)$
 
-![[relabel operator.png]]
+![[relabel operator.png|507]]
 这里的 $R$ 是 [[Core rewrite rule representation with selected operators.png]] 中定义的 Relabel Maps，定义了聚合轴集合上的置换。 Relabel 是作者为了验证的方便而引入的。
 
 根据作者的说法，在 TensorRight 中，由于采用了 aggregated axes 的表示，轴是无序的，在这个意义下一些作用于轴顺序的算子（如转置）相当于 idendity，然后 relabel 是用来对类似于 $t+\mathrm{transpose}(t)$ 的表达式做轴的重命名的，例如：
 
-![[transpose rewrite rule example.png]]
+![[transpose rewrite rule example.png|588]]
 但我个人的理解是，这类作用于轴顺序的算子，在 TensorRight 的语义下就可以直接定义成特殊的 relabel 算子，例如转置就是一个二轮换，是一种特殊的置换。
 
 ## §6 Verification of Rewrite Rules
@@ -240,9 +243,9 @@ where $L_1=\{x \mapsto l_1\}$ and $L_2 = \{x \mapsto l_2\}$, for some maps $l_1$
 
 pad-low 算子语义如下：
 
-![[pad-low operator.png]]
+![[pad-low operator.png|697]]
 
 由于 LHS 和 RHS 具有相同的 shape，因此 $[\![\text{LHS}]\!] = [\![\text{RHS}]\!]$ 可以对所有合法的 $A \in \text{Access}(\text{LHS})$ 展开，并按照语义符号执行，得到最终的语义：
 
-![[symbolic evaluation example.png]]
+![[symbolic evaluation example.png|626]]
 

@@ -5,8 +5,11 @@ tags:
   - paper-reading
 zhihu-title: "[PLDI'19] Semantic Program Alignment for Equivalence Checking"
 feishushare: true
-feishu_url: "https://feishu.cn/docx/BjQcd4HwaolIAGxn9wecSqjNntC"
-feishu_shared_at: "2026-03-09 12:46"
+feishu_url: https://feishu.cn/docx/BjQcd4HwaolIAGxn9wecSqjNntC
+feishu_shared_at: 2026-03-09 12:46
+zhihu-topics:
+  - PLDI
+  - 等价性验证
 ---
 ## 概要
 
@@ -73,8 +76,8 @@ feishu_shared_at: "2026-03-09 12:46"
 用关系 Hoare 三元组表示证明义务：令 $\phi_1, \phi_2$ 表示 $f$ 和 $g$ 的状态上的谓词（不变式），$P$, $Q$ 分别表示 $f$, $g$ 的一条执行路径，则 $\{\phi_1\} \; P; Q \; \{\phi_2\}$ 表示如下陈述：若在状态 $\sigma,\sigma'$ 处 $\phi_1(\sigma,\sigma')$ 成立，且执行路径 $P,Q$，则执行终止于状态 $\sigma'',\sigma'''$，且 $\phi_2(\sigma'',\sigma''')$ 成立。
 
 用 PAA 证明程序等价性：
-1. 对于每条转移边 $s \xrightarrow{P, Q} t$，证明 $\hoare{\phi_s}{P;Q}{\phi_t}$（i.e. 转移的归纳性）。
-2. 对于每个结点 $s = (u,u')$ ，所有不在 PAA 中的从 $(u,u')$ 出发的程序路径对均不可达（即，PAA 没有遗漏乘积程序语义，是一个可靠的上近似）。形式化地，若 $P, Q$ 分别为 $f, g$ 中从 $u, u'$ 出发的路径，且 PAA 不存在转移 $s \xrightarrow{P^{*},Q^{*}} s'$ 满足 $P^{*},Q^{*}$ 分别为 $P,Q$ 的前缀，则有 $\hoare{\phi_{s}}{P;Q}{\bot}$ 。
+1. 对于每条转移边 $s \xrightarrow{P, Q} t$，证明 $\{\phi_s\}\; P;Q \; \{\phi_t\}$（i.e. 转移的归纳性）。
+2. 对于每个结点 $s = (u,u')$ ，所有不在 PAA 中的从 $(u,u')$ 出发的程序路径对均不可达（即，PAA 没有遗漏乘积程序语义，是一个可靠的上近似）。形式化地，若 $P, Q$ 分别为 $f, g$ 中从 $u, u'$ 出发的路径，且 PAA 不存在转移 $s \xrightarrow{P^{*},Q^{*}} s'$ 满足 $P^{*},Q^{*}$ 分别为 $P,Q$ 的前缀，则有 $\{\phi_{s}\}\; P;Q \; \{\bot\}$ 。
 3. PAA 中不存在由转移边构成的回路，使得回路的每条转移边上 $f$ 侧（或 $g$ 侧）的程序路径均为空（否则，$g$ （或 $f$）非终止）。
 4. 出口结点处的不变式蕴含输出状态相等。
 

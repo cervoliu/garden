@@ -1,7 +1,6 @@
 ---
 draft: true
 ---
-
 质疑 SMT 内部维护等价类的算法的有效性
 
 query decomposition: 拆分成 subexpression 
