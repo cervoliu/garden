@@ -3,6 +3,9 @@ tags:
   - OOPSLA18
   - relational-verification
   - paper-reading
+feishushare: true
+feishu_url: "https://feishu.cn/docx/Uhxydfif6o9ahuxL3mkcf99Yn9f"
+feishu_shared_at: "2026-03-12 10:42"
 ---
 ![[semantic conflict freedom.png|627]]
 
