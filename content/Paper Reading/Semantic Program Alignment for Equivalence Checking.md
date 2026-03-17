@@ -55,7 +55,7 @@ zhihu-topics:
 
 如图 4，选择对齐谓词为 $\xi \triangleq array + 4i = array'$，左右两张表格展示了 $f, g$ 在相同测例下的轨迹。两张表格之间相连的边 $e$ 表示由 $\xi$ 对齐的状态对，它们组成 $\xi$ 的轨迹对齐。
 
-![[Figure 5.png|314]]
+![[Paper Reading/Semantic Program Alignment for Equivalence Checking__assets/Figure 5.png|314]]
 
 轨迹对齐可以诱导出对应路径（corresponding paths），如图 5。考虑轨迹对齐中不相交（do not cross each other）且相邻（have no edges in between them） 的两条边。例如，考虑 $e_{21} \to e_{42}$，$f$ 从 $e_{21}$ 到 $e_{42}$ 的路径为 $bb$，$g$ 从 $e_{21}$ 到 $e_{42}$ 的路径为 $c'$，则称 $bb$ 和 $c'$ 构成一组对应路径。
 

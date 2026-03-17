@@ -11,7 +11,7 @@ author: JuneYoung Lee et.al.
 
 应当是首篇正式地提出形式化的 LLVM memory model 的工作，发表于 OOPSLA 2018。
 
-可以认为是后续 [[An SMT Encoding of LLVM’s Memory Model for Bounded Translation Validation]] 以及 [[Alive2 - Bounded Translation Validation for LLVM]] 的内存模型方面的理论基础。
+可以认为是后续 [[An SMT Encoding of LLVM’s Memory Model for Bounded Translation Validation]] 以及 [[Alive2]] 的内存模型方面的理论基础。
 
 > The two main questions a **memory model** needs to answer are (1) what is the return value of a load instruction, and (2) under what conditions is a memory-accessing instruction well-defined. A consequence is that the memory model should define which memory location a store instruction writes to.
 
