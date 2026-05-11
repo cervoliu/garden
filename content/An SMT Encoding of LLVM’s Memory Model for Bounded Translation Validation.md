@@ -6,5 +6,22 @@ tags:
   - LLVM
   - CAV21
 ---
-[[Reconciling High-Level Optimizations and Low-Level Code in LLVM]]
+## Preface
+
+LLVM Preliminaries:
+- [[Undefined Behaviors in LLVM|Undefined Behaviors]]
+- [[Reconciling High-Level Optimizations and Low-Level Code in LLVM#Memory Model for LLVM|Pointer Provenance]]
+
+See also: [[Reconciling High-Level Optimizations and Low-Level Code in LLVM]]
+## Motivating Example
+
+```C
+int f(int *p) {
+	int *q = malloc(4);
+	*q = 42;
+	int *r = g(p+1);
+	*r = 37;
+	return *q;
+}
+```
 
