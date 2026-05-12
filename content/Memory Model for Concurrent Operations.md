@@ -20,4 +20,4 @@ Every (defined) read operation (load instructions, memcpy, atomic loads/read-mod
 
 Given that definition, $R_{byte}$ is defined as follows:
 - If $R$ is volatile, the result is target-dependent. (Volatile is supposed to give guarantees which can support `sig_atomic_t` in C/C++, and may be used for accesses to addresses that do not behave like normal memory. It does not generally provide cross-thread synchronization.)
-- 
+- TODO
