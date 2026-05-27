@@ -6,6 +6,8 @@ feishushare: true
 feishu_url: "https://feishu.cn/docx/RsDOdial9o8qqFxwIdOc0WfDnMg"
 feishu_shared_at: "2026-05-26 11:52"
 ---
+本文于 2026 年 3 月存档于 arxiv，可以认为是在ASPLOS'26 [[It Takes Two to Entangle]] 基础上的增量式工作。
+
 ### 问题背景
 
 在大模型部署生态中，同一个模型架构往往存在多个实现——例如 HuggingFace Transformers 提供的参考实现与 vLLM 提供的高性能推理实现。由于算子分解、张量布局、融合内核等层面的差异，即使两个实现在数学上等价，它们的计算图也可能大相径庭。当这种**实现等价性**（Implementation Equivalence）不成立时，往往产生"沉默 bug"：程序不会崩溃或报错，但中间张量或最终输出是错误的 (Zhan et al. 2026, 1)。这类问题已在 Megatron-LM 和 vLLM 等生产级框架中被多次发现。
