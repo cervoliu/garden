@@ -2,6 +2,9 @@
 tags:
   - asplos26
   - e-graph
+feishushare: true
+feishu_url: "https://feishu.cn/docx/XpJqd6HPdoWYmPxlgoccr2c9nWc"
+feishu_shared_at: "2026-05-29 12:01"
 ---
 ### 背景与动机
 
@@ -9,7 +12,7 @@ tags:
 
 ### 核心思想：模型精化（Model Refinement）
 
-Entangle 的核心问题是检查 **模型精化**：给定顺序模型 $G_s$ 和分布式实现 $G_d$，能否仅通过**清洁操作**（数据重排如 slice、concat、transpose，以及通信聚合如 reduce-sum）从 $G_d$ 的输出重建 $G_s$ 的输出？如果不能找到这样一个完整的清洁输出关系，就意味着实现中存在 bug。
+Entangle 的核心问题是检查 **模型精化**：给定顺序模型 $G_s$ 和分布式实现 $G_d$，能否仅通过**清洁操作（clean operations）**（数据重排如 slice、concat、transpose，以及通信聚合如 reduce-sum）从 $G_d$ 的输出重建 $G_s$ 的输出？如果不能找到这样一个完整的清洁输出关系，就意味着实现中存在 bug。
 
 这个概念的精妙之处在于：分布策略的正确性保障原本就是"**假设输入被正确切分，那么组合多个 GPU 的输出应当能恢复原始结果**"。Entangle 正是利用了这一观察——只需检查是否存在适合的输出映射关系，而不要求 $G_d$ 与 $G_s$ 的输出完全相同（这比等价性验证更宽松，也更实用）。 (Wang et al. 2026, 3–4)
 
@@ -60,3 +63,38 @@ Entangle 提供了一个实用的静态验证工具，通过将分布式 ML 模�
 ## Sources
 
 Wang, Zhanghan, Ding Ding, Hang Zhu, Haibin Lin, and Aurojit Panda. 2026. “It Takes Two to Entangle.” Proceedings of the 31st ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 2, March 22, 1022–39. https://doi.org/10.1145/3779212.3790178.
+
+---
+## 1. 计算图是怎么从模型中来的？
+
+计算图是通过**现有工具自动捕获**的，不是手工构建的。具体来说，Entangle 使用 **TorchDynamo** 来捕获 PyTorch 模型的计算图，输出的图采用 **torch.fx 风格的图表示**，算子使用 **ATen IR**（PyTorch 的标准中间表示） (Wang et al. 2026, 8)。
+
+举个例子：假设你用 PyTorch 写了一个简单的 Transformer 层，包含 `nn.Linear`、`matmul`、`softmax` 等操作。TorchDynamo 会在模型执行时追踪这些操作，自动生成一个 DAG（有向无环图），其中**算子（如 `matmul`、`concat`）是顶点，张量是边** (Wang et al. 2026, 4)。这个图就是 Entangle 的输入——你不需要手写任何图定义。
+
+关键的设计选择是：**串行版本 $G_s$ 和分布式版本 $G_d$ 使用完全相同的模型配置来捕获**，只是并行度参数不同 (Wang et al. 2026, 8)。这确保了两者经历了相同的编译器优化（如算子融合、FlashAttention 替换），从而满足 Entangle 的核心假设——分布式实现不应该比串行规范多出任何"计算"，只应该多出通信和重排操作 (Wang et al. 2026, 4)。
+
+对于非 PyTorch 框架，Entangle 也支持：比如他们在评估中用了一个基于 AWS NeuronX（底层是 XLA/HLO）的模型，先用 XLA 生成计算图，再写了一个 377 行的 Python 工具把 XLA 的输出翻译成 Entangle 的中间格式。类似的方法可以用于 TensorFlow 或 JAX (Wang et al. 2026, 8)。
+
+---
+
+## 2. 计算图中的张量形状和元素是具体值还是符号值？
+
+**张量不携带实际数据值，只携带元数据——即形状（shape）和数据类型（dtype）** (Wang et al. 2026, 9)。这很合理：在编译期做验证时，你关心的是张量的维度是否匹配、切分方式是否一致，而不关心具体的浮点数值。
+
+但问题在于：**形状本身也可能是符号的**。例如在动态形状场景中，某个维度的长度可能不是一个具体数字（如 128），而是一个符号标量（symbolic scalar）。这些符号标量可以从张量中通过 `select` 等算子提取出来，然后参与形状计算 (Wang et al. 2026, 9)。
+
+举个例子直观理解：假设有一个 `slice` 操作 `X[a:b]`，其中 `a` 和 `b` 可能不是字面量 16 和 32，而是从别的张量中提取出来的符号值。TorchDynamo 会把这种值表示为符号标量——它有一个名字（比如 `s0`、`s1`），但没有具体的数值。这是现代深度学习编译器（包括 torch.compile）的标准做法，因为模型可能在运行时有不同的批次大小或序列长度。
+
+---
+
+## 3. 为什么第 5 章提到要用 SMT-LIB 编码 symbolic scalars？
+
+核心矛盾在于：**EGraph 不能直接比较符号标量，但重写规则的触发偏偏需要比较它们** (Wang et al. 2026, 9)。
+
+举个具体的例子来说明。考虑这条 lemma（重写规则）：
+
+> `concat(X₁, X₂, dim)[a:b]` 在什么条件下可以重写？答案取决于 `a`、`b` 和 `X₁`、`X₂` 的尺寸之间的关系——我们需要知道 `a` 和 `b` 是落在哪个张量的范围内，才能判断 `slice` 和 `concat` 是否可交换。如果 `a` 和 `b` 都是符号标量（比如 `s0`、`s1`），EGraph 本身无法判断 `s0 < shape(X₁)` 是否成立。
+
+Entangle 的解决方案是：**把每个标量关联上元数据（要么是一个具体值，要么是一个符号标识符），当需要比较符号标量时，用 SMT-LIB 编码这些约束，交给 SMT 求解器来判断** (Wang et al. 2026, 9)。
+
+论文中特别提到，在实际使用的模型中，符号标量只涉及简单运算（比如加法），所以用 SMT 求解器来判断相等或不等是可行的，不会引起不可判定性或性能问题 (Wang et al. 2026, 9)。这样，Entangle 就能在计算图包含符号值的情况下，依然完成端到端的验证。
