@@ -16,3 +16,21 @@ title: "Linear Layouts: Robust Code Generation of Efficient Tensor Computation U
 
 > Note that these instructions require data to be distributed across threads and warps, or reside in shared memory or special memory units (e.g., Tensor Memory on Blackwell [36]) in special layouts to yield correct results.
 
+### Triton Language and Compiler
+
+只需要了解 Triton dialect (`tt`) 被降级到 TritonGPU dialect (`ttgpu`) 的过程中，所有 tensor 变量的类型都会附带上 layout 属性，用以表示硬件相关的访存机制即可。
+### Linear Algebra Preliminaries
+
+概念自查：向量空间，子空间，线性组合，线性无关，张成，线性基。
+
+### $\mathbb{F}_{2}$ Mathematics
+
+$\mathbb{F}_{2}$ 其实就是只有 $\{0,1\}$ 组成的有限域。$\mathbb{F}_{2}$ 上的加法被解释成逻辑 XOR，乘法被解释为逻辑 AND。
+
+## Overview
+
+![[layout manifest.png]]
+
+![[Legacy Layouts.png]]
+
+原始的 Triton Layout 体系中有两种 Layout：Memory Layout 和 Distributed Layout。前者用于在特殊的可编程内存区域（如 shared memory, tensor memory）上表示张量布局，后者用于表示“分散”在各个线程内部存储（寄存器）的张量布局。
