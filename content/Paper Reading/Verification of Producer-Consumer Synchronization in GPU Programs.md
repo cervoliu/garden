@@ -13,8 +13,9 @@ zhihu-topics:
   - synchronization
 zhihu-toc: true
 feishushare: true
-feishu_url: "https://feishu.cn/docx/XWgydkzvqovgCixV78CcRg7An0d"
-feishu_shared_at: "2026-06-04 19:35"
+feishu_url: https://feishu.cn/docx/XWgydkzvqovgCixV78CcRg7An0d
+feishu_shared_at: "2026-06-04 19:42"
+zhihu-link: https://zhuanlan.zhihu.com/p/2045950375019259252
 ---
 ## 背景与动机
 
